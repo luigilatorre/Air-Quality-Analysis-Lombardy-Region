@@ -12,14 +12,21 @@ Certainly! Here's an updated Table of Contents that includes the main themes fro
 5. [Data Enrichment](#data-enrichment)
 6. [Merging Datasets](#merging-datasets)
 7. [Data Processing and Initial Analysis](#data-processing-and-initial-analysis)
-    - [Loading and Initial Inspection](#loading-and-initial-inspection)
-    - [Data Type Conversion](#data-type-conversion)
-    - [Handling Missing and Invalid Data](#handling-missing-and-invalid-data)
 8. [Focusing on Key Pollutants](#focusing-on-key-pollutants)
 9. [Further Data Enrichment](#further-data-enrichment)
 10. [Final Data Cleaning and Column Renaming](#final-data-cleaning-and-column-renaming)
 11. [Saving the Cleaned Dataset](#saving-the-cleaned-dataset)
-
+12. [ARPA Data Analysis](#arpa-data-analysis)
+    - [Loading and Preprocessing](#loading-and-preprocessing)
+    - [Data Enrichment with Pollutant Thresholds](#data-enrichment-with-pollutant-thresholds)
+    - [Seasonal Variations Analysis](#seasonal-variations-analysis)
+    - [Geographical Availability Analysis](#geographical-availability-analysis)
+13. [Focus on Nitrogen Dioxide (NO2)](#focus-on-nitrogen-dioxide-no2)
+    - [Filtering and Saving NO2 Data](#filtering-and-saving-no2-data)
+    - [Monthly and Yearly Trends](#monthly-and-yearly-trends)
+    - [Peak Period Analysis](#peak-period-analysis)
+    - [Station-Specific Analysis](#station-specific-analysis)
+      
 ## Introduction
 
 ARPA Lombardia's air quality detection network consists of fixed stations that provide continuous data at regular time intervals. The pollutant species monitored include NOX, SO2, CO, O3, PM10, PM2.5, and benzene.
@@ -222,31 +229,6 @@ df_cleaned.to_csv('df_cleaned.csv', index=False)
 ```
 
 This cleaned dataset now contains only the relevant pollutants and necessary information for our analysis on determining the optimal location and operation times for an Air Purifier in the Lombardy region.
-
-Certamente! Ecco una versione aggiornata della Table of Contents che include i nuovi contenuti della parte 3, seguita da un riassunto delle nuove sezioni da aggiungere al README:
-
-## Table of Contents
-1. [Introduction](#introduction)
-2. [Data Source](#data-source)
-3. [Accessing the Data via API](#accessing-the-data-via-api)
-4. [Data Extraction](#data-extraction)
-5. [Data Enrichment](#data-enrichment)
-6. [Merging Datasets](#merging-datasets)
-7. [Data Processing and Initial Analysis](#data-processing-and-initial-analysis)
-8. [Focusing on Key Pollutants](#focusing-on-key-pollutants)
-9. [Further Data Enrichment](#further-data-enrichment)
-10. [Final Data Cleaning and Column Renaming](#final-data-cleaning-and-column-renaming)
-11. [Saving the Cleaned Dataset](#saving-the-cleaned-dataset)
-12. [ARPA Data Analysis](#arpa-data-analysis)
-    - [Loading and Preprocessing](#loading-and-preprocessing)
-    - [Data Enrichment with Pollutant Thresholds](#data-enrichment-with-pollutant-thresholds)
-    - [Seasonal Variations Analysis](#seasonal-variations-analysis)
-    - [Geographical Availability Analysis](#geographical-availability-analysis)
-13. [Focus on Nitrogen Dioxide (NO2)](#focus-on-nitrogen-dioxide-no2)
-    - [Filtering and Saving NO2 Data](#filtering-and-saving-no2-data)
-    - [Monthly and Yearly Trends](#monthly-and-yearly-trends)
-    - [Peak Period Analysis](#peak-period-analysis)
-    - [Station-Specific Analysis](#station-specific-analysis)
 
 ## ARPA Data Analysis
 
