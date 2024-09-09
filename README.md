@@ -1,5 +1,3 @@
-Certainly! I'll transform the Jupyter notebook content into a GitHub README format, presenting it as if you were asking questions and answering them with the provided code. Here's the formatted README:
-
 # ARPA Data Analysis: Data Extraction and Initial Cleaning
 
 This repository contains an analysis of weather, air and water pollution data from ARPA Lombardy (Regional Agency for the Protection of the Environment).
@@ -89,8 +87,3 @@ merged_df.shape
 merged_df.to_csv("final-merged-arpa.csv")
 ```
 
-This creates our final dataset, which includes both the air quality measurements and the detailed information about each sensor.
-
----
-
-Note: Make sure to replace file paths with the appropriate paths for your system when running this code.
