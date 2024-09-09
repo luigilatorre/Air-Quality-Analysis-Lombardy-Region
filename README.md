@@ -222,3 +222,125 @@ df_cleaned.to_csv('df_cleaned.csv', index=False)
 ```
 
 This cleaned dataset now contains only the relevant pollutants and necessary information for our analysis on determining the optimal location and operation times for an Air Purifier in the Lombardy region.
+
+Certamente! Ecco una versione aggiornata della Table of Contents che include i nuovi contenuti della parte 3, seguita da un riassunto delle nuove sezioni da aggiungere al README:
+
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Data Source](#data-source)
+3. [Accessing the Data via API](#accessing-the-data-via-api)
+4. [Data Extraction](#data-extraction)
+5. [Data Enrichment](#data-enrichment)
+6. [Merging Datasets](#merging-datasets)
+7. [Data Processing and Initial Analysis](#data-processing-and-initial-analysis)
+8. [Focusing on Key Pollutants](#focusing-on-key-pollutants)
+9. [Further Data Enrichment](#further-data-enrichment)
+10. [Final Data Cleaning and Column Renaming](#final-data-cleaning-and-column-renaming)
+11. [Saving the Cleaned Dataset](#saving-the-cleaned-dataset)
+12. [ARPA Data Analysis](#arpa-data-analysis)
+    - [Loading and Preprocessing](#loading-and-preprocessing)
+    - [Data Enrichment with Pollutant Thresholds](#data-enrichment-with-pollutant-thresholds)
+    - [Seasonal Variations Analysis](#seasonal-variations-analysis)
+    - [Geographical Availability Analysis](#geographical-availability-analysis)
+13. [Focus on Nitrogen Dioxide (NO2)](#focus-on-nitrogen-dioxide-no2)
+    - [Filtering and Saving NO2 Data](#filtering-and-saving-no2-data)
+    - [Monthly and Yearly Trends](#monthly-and-yearly-trends)
+    - [Peak Period Analysis](#peak-period-analysis)
+    - [Station-Specific Analysis](#station-specific-analysis)
+
+## ARPA Data Analysis
+
+In this section, we analyze the pollutants in the dataset.
+
+### Loading and Preprocessing
+
+We load the cleaned dataset and perform necessary type conversions:
+
+```python
+import pandas as pd
+import seaborn as sns
+
+df = pd.read_csv('df_cleaned.csv', index_col=False)
+df1 = df.copy()
+
+df1['date'] = pd.to_datetime(df1['date'], format='ISO8601')
+df1['date_start'] = pd.to_datetime(df1['date_start'], format='ISO8601')
+df1['date_stop'] = pd.to_datetime(df1['date_stop'], format='ISO8601')
+```
+
+### Data Enrichment with Pollutant Thresholds
+
+We load and process a dataset containing thresholds for each pollutant:
+
+```python
+df_th = pd.read_csv("pollutant_thresholds_arpa.csv")
+df_th = df_th[df_th['Inquinante'].isin(['Biossido di Azoto', 'Biossido di Zolfo', 'Ozono', 'PM10'])]
+```
+
+### Seasonal Variations Analysis
+
+We analyze seasonal variations for each pollutant:
+
+```python
+df1.loc[:, "year"] = df1["date"].dt.year
+df1.loc[:, "month"] = df1["date"].dt.month
+
+df_time_group = df1.groupby(["year", "month", "sensor_name"], as_index=False)["value"].agg("mean")
+
+# Plotting code here (using seaborn)
+```
+
+### Geographical Availability Analysis
+
+We investigate data availability for each pollutant across all stations:
+
+```python
+df_loc = df.groupby(['station_name', 'sensor_name'], as_index=False).size().reset_index()
+df_loc_piv = df_loc.pivot(index='station_name', columns='sensor_name', values='size')
+
+# Heatmap visualization code here
+```
+
+## Focus on Nitrogen Dioxide (NO2)
+
+We decide to focus on NO2 for further analysis due to its prevalence and impact.
+
+### Filtering and Saving NO2 Data
+
+```python
+df_no2 = df1[df1['sensor_name']=='Nitrogen Dioxide']
+df_no2.to_csv('df_no2.csv', index=False)
+```
+
+### Monthly and Yearly Trends
+
+We visualize monthly and yearly trends for NO2:
+
+```python
+sns.lineplot(df_no2, x='month', y='value', hue='year')
+```
+
+### Peak Period Analysis
+
+We analyze NO2 levels during peak periods (October to March):
+
+```python
+avg_value_by_station_in_peak_periods = df_no2.loc[(df_no2.month >= 10) | (df_no2.month <= 3)].groupby(
+    'station_name'
+).agg(
+    {
+        'value': 'mean',
+        'date': 'count'
+    }
+)
+```
+
+### Station-Specific Analysis
+
+We perform a detailed analysis for a specific station (Milano v.Marche):
+
+```python
+sns.lineplot(df_no2.loc[df_no2.station_name.eq('Milano v.Marche')], x='month', y='value', hue='year')
+```
+
+This analysis provides insights into NO2 pollution patterns, helping to determine the most effective locations and times for air purifier operation in the Lombardy region.
