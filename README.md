@@ -35,7 +35,7 @@ ARPA Lombardia's air quality detection network consists of fixed stations that p
 
 ### Data Source
 
-The main dataset used in this analysis can be found [here](https://www.dati.lombardia.it/Ambiente/Dati-sensori-aria-dal-2018/g2hp-ar79). It contains air quality data from 2018 to the present day.
+The main dataset used in this analysis can be found [here](https://www.dati.lombardia.it/Ambiente/Dati-sensori-aria-dal-2018/g2hp-ar79/about_data). It contains air quality data from 2018 to the present day.
 
 ### Accessing the Data via API
 
