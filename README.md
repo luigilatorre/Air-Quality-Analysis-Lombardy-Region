@@ -2,40 +2,42 @@
 
 This repository contains an analysis of weather, air and water pollution data from ARPA Lombardy (Regional Agency for the Protection of the Environment).
 
-Certainly! Here's an updated Table of Contents that includes the main themes from the second part:
-
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Data Source](#data-source)
-3. [Accessing the Data via API](#accessing-the-data-via-api)
-4. [Data Extraction](#data-extraction)
-5. [Data Enrichment](#data-enrichment)
-6. [Merging Datasets](#merging-datasets)
-7. [Data Processing and Initial Analysis](#data-processing-and-initial-analysis)
-8. [Focusing on Key Pollutants](#focusing-on-key-pollutants)
-9. [Further Data Enrichment](#further-data-enrichment)
-10. [Final Data Cleaning and Column Renaming](#final-data-cleaning-and-column-renaming)
-11. [Saving the Cleaned Dataset](#saving-the-cleaned-dataset)
-12. [ARPA Data Analysis](#arpa-data-analysis)
-    - [Loading and Preprocessing](#loading-and-preprocessing)
-    - [Data Enrichment with Pollutant Thresholds](#data-enrichment-with-pollutant-thresholds)
-    - [Seasonal Variations Analysis](#seasonal-variations-analysis)
-    - [Geographical Availability Analysis](#geographical-availability-analysis)
-13. [Focus on Nitrogen Dioxide (NO2)](#focus-on-nitrogen-dioxide-no2)
-    - [Filtering and Saving NO2 Data](#filtering-and-saving-no2-data)
-    - [Monthly and Yearly Trends](#monthly-and-yearly-trends)
-    - [Peak Period Analysis](#peak-period-analysis)
-    - [Station-Specific Analysis](#station-specific-analysis)
-      
+2. [Data Acquisition and Preparation](#data-acquisition-and-preparation)
+   - [Data Source](#data-source)
+   - [Accessing the Data via API](#accessing-the-data-via-api)
+   - [Data Extraction](#data-extraction)
+   - [Data Enrichment](#data-enrichment)
+   - [Merging Datasets](#merging-datasets)
+3. [Data Processing and Cleaning](#data-processing-and-cleaning)
+   - [Initial Analysis](#initial-analysis)
+   - [Handling Missing and Invalid Data](#handling-missing-and-invalid-data)
+   - [Focusing on Key Pollutants](#focusing-on-key-pollutants)
+   - [Final Data Cleaning and Column Renaming](#final-data-cleaning-and-column-renaming)
+4. [ARPA Data Analysis](#arpa-data-analysis)
+   - [Loading and Preprocessing](#loading-and-preprocessing)
+   - [Data Enrichment with Pollutant Thresholds](#data-enrichment-with-pollutant-thresholds)
+   - [Seasonal Variations Analysis](#seasonal-variations-analysis)
+   - [Geographical Availability Analysis](#geographical-availability-analysis)
+5. [Focus on Nitrogen Dioxide (NO2)](#focus-on-nitrogen-dioxide-no2)
+   - [Monthly and Yearly Trends](#monthly-and-yearly-trends)
+   - [Peak Period Analysis](#peak-period-analysis)
+   - [Station-Specific Analysis](#station-specific-analysis)
+6. [Advanced Analysis](#advanced-analysis)
+7. [Conclusions and Recommendations](#conclusions-and-recommendations)
+
 ## Introduction
 
 ARPA Lombardia's air quality detection network consists of fixed stations that provide continuous data at regular time intervals. The pollutant species monitored include NOX, SO2, CO, O3, PM10, PM2.5, and benzene.
 
-## Data Source
+## Data Acquisition and Preparation
+
+### Data Source
 
 The main dataset used in this analysis can be found [here](https://www.dati.lombardia.it/Ambiente/Dati-sensori-aria-dal-2018/g2hp-ar79/about_data). It contains air quality data from 2018 to the present day.
 
-## Accessing the Data via API
+### Accessing the Data via API
 
 The data can be accessed via an API endpoint. The base URL for the API is:
 
@@ -49,11 +51,9 @@ To retrieve more than the default 1000 rows, we can use the `$limit` and `$offse
 https://www.dati.lombardia.it/resource/g2hp-ar79.csv?$limit=50000&$offset=0
 ```
 
-## Data Extraction
+### Data Extraction
 
-Q: How can we download all the data from the API, given the 50,000 row limit per request?
-
-A: We can use a loop to make multiple API calls, incrementing the offset each time. Here's the code to do that:
+We can use a loop to make multiple API calls, incrementing the offset each time. Here's the code to do that:
 
 ```python
 import pandas as pd
@@ -79,22 +79,18 @@ print(final_df.head())
 final_df.to_csv('final_data.csv', index=False)
 ```
 
-## Data Enrichment
+### Data Enrichment
 
-Q: How can we enrich our dataset with additional information about the sensors?
-
-A: We can download a lookup table containing information about each sensor:
+We can download a lookup table containing information about each sensor:
 
 ```python
 stazioni = pd.read_csv("stazioni-aria.csv")
 stazioni.head(1)
 ```
 
-## Merging Datasets
+### Merging Datasets
 
-Q: How do we combine the main dataset with the sensor information?
-
-A: We can merge the two datasets using the 'idsensore' column as the key:
+We can merge the two datasets using the 'idsensore' column as the key:
 
 ```python
 merged_df = pd.merge(final_df, stazioni, on="idsensore", how="left")
@@ -104,11 +100,11 @@ merged_df.shape
 merged_df.to_csv("final-merged-arpa.csv")
 ```
 
-## Data Processing and Initial Analysis
+## Data Processing and Cleaning
 
 After extracting and merging the datasets, we proceed with data processing and initial analysis. This section covers data cleaning, focusing on key pollutants, and preparing the dataset for further analysis.
 
-### Loading and Initial Inspection
+### Initial Analysis
 
 ```python
 import pandas as pd
@@ -118,8 +114,6 @@ df_copy = df.copy()
 
 df_copy.info()
 ```
-
-### Data Type Conversion
 
 We convert date columns to the appropriate datetime format:
 
@@ -172,8 +166,6 @@ pollutants = ['PM10 (SM2005)', 'Particelle sospese PM2.5', 'Ozono', 'Biossido di
 df_pol = df_copy[df_copy['nometiposensore'].isin(pollutants)].copy()
 ```
 
-### Data Enrichment
-
 We add English names and chemical symbols for the pollutants:
 
 ```python
@@ -219,8 +211,6 @@ df_cleaned = df_pol.rename(columns={
     'lng': 'long'
 })
 ```
-
-### Saving the Cleaned Dataset
 
 Finally, we save our cleaned dataset for further analysis:
 
@@ -324,5 +314,29 @@ We perform a detailed analysis for a specific station (Milano v.Marche):
 ```python
 sns.lineplot(df_no2.loc[df_no2.station_name.eq('Milano v.Marche')], x='month', y='value', hue='year')
 ```
+
+## Advanced Analysis
+
+This section could include more sophisticated analytical techniques such as:
+- Correlation analysis between different pollutants
+- Time series forecasting of pollution levels
+- Geospatial analysis of pollution distribution
+
+## Conclusions and Recommendations
+
+Based on our analysis, we can draw conclusions about:
+- Seasonal patterns in air pollution
+- Geographical hotspots of pollution
+- Effectiveness of current air quality monitoring
+
+Recommendations for air purifier placement and operation:
+- Optimal locations based on pollution levels
+- Seasonal operational schedules
+- Integration with real-time air quality data
+
+Future work could include:
+- Integrating weather data to model the impact of meteorological conditions on pollution levels
+- Developing predictive models for air quality
+- Expanding the analysis to include other regions for comparison
 
 This analysis provides insights into NO2 pollution patterns, helping to determine the most effective locations and times for air purifier operation in the Lombardy region.
