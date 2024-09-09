@@ -1,4 +1,4 @@
-# ARPA Data Analysis: Data Extraction and Initial Cleaning
+# ARPA Lombardy Data Analysis: Air Pollution Insights and Data Processing for Optimizing Air Purifier Placement
 
 This repository contains an analysis of weather, air and water pollution data from ARPA Lombardy (Regional Agency for the Protection of the Environment).
 
